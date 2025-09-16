@@ -24,11 +24,11 @@ public class User {
     private ObjectId id;
     @Indexed(unique = true)
     @NonNull
-    private String UserName;
+    private String userName;
     @NonNull
     private String password;
 
     @DBRef
-    private List<JournalEntity> JournalEntity = new ArrayList<>();
+    private List<JournalEntity> getJournalEntries = new ArrayList<>();
 
 }

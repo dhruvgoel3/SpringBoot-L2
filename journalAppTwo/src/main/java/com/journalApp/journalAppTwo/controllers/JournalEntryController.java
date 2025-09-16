@@ -2,6 +2,8 @@ package com.journalApp.journalAppTwo.controllers;
 
 import com.journalApp.journalAppTwo.entity.JournalEntity;
 import com.journalApp.journalAppTwo.services.JournalServices;
+import com.journalApp.journalAppTwo.services.UserServices;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,11 @@ public class JournalEntryController {
     @Autowired
     private JournalServices journalServices;
 
-    @GetMapping("/getAll")
-    public List<JournalEntity> getAll() {
+    @Autowired
+    private UserServices userServices;
+
+    @GetMapping("/{userName}")
+    public List<JournalEntity> getAllJournalEntriesOfUser(@PathVariable String userName) {
         return journalServices.getAllEntries();
     }
 
