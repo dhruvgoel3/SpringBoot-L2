@@ -32,10 +32,10 @@ public class JournalEntryController {
         return journalServices.findById(myId);
     }
 
-    @PostMapping
-    public JournalEntity createEntry(@RequestBody JournalEntity myEntry) {
+    @PostMapping("/{userName}")
+    public JournalEntity createEntry(@RequestBody JournalEntity myEntry, @PathVariable String userName) {
         myEntry.setDate(LocalDateTime.now());
-        return journalServices.saveEntry(myEntry);
+        return journalServices.saveEntry(myEntry, userName);
     }
 
     @DeleteMapping("/id/{myId}")
@@ -49,26 +49,27 @@ public class JournalEntryController {
         journalServices.deleteAll();
     }
 
-    @PutMapping("/id/{id}")
-    public JournalEntity updateJournalEntry(
-            @PathVariable ObjectId id,
-            @RequestBody JournalEntity newEntry) {
+    // @PutMapping("/id/{id}")
+    // public JournalEntity updateJournalEntry(
+    // @PathVariable ObjectId id,
+    // @RequestBody JournalEntity newEntry) {
 
-        // find existing entry or throw if not found
-        JournalEntity old = journalServices.findById(id)
-                .orElseThrow(() -> new RuntimeException("Journal entry not found: " + id));
+    // // find existing entry or throw if not found
+    // JournalEntity old = journalServices.findById(id)
+    // .orElseThrow(() -> new RuntimeException("Journal entry not found: " + id));
 
-        // update only if new values are provided and not empty
-        old.setTitle(
-                newEntry.getTitle() != null && !newEntry.getTitle().isEmpty() ? newEntry.getTitle() : old.getTitle());
+    // // update only if new values are provided and not empty
+    // old.setTitle(
+    // newEntry.getTitle() != null && !newEntry.getTitle().isEmpty() ?
+    // newEntry.getTitle() : old.getTitle());
 
-        old.setContent(
-                newEntry.getContent() != null && !newEntry.getContent().isEmpty()
-                        ? newEntry.getContent()
-                        : old.getContent());
+    // old.setContent(
+    // newEntry.getContent() != null && !newEntry.getContent().isEmpty()
+    // ? newEntry.getContent()
+    // : old.getContent());
 
-        // persist the changes
-        return journalServices.saveEntry(old);
-    }
+    // // persist the changes
+    // return journalServices.saveEntry(old);
+    // }
 
 }

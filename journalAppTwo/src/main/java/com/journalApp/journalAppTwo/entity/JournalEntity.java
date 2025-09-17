@@ -46,4 +46,13 @@ public class JournalEntity {
         this.date = date;
     }
 
+    @Override
+    public String toString() {
+        return "JournalEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
+
 }
