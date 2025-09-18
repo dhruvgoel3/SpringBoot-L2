@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.journalApp.journalAppTwo.Repository.UserRepository;
 import com.journalApp.journalAppTwo.entity.User;
+
 @Service
 public class UserServices {
 
@@ -33,8 +34,8 @@ public class UserServices {
         userRepository.deleteById(myId);
     }
 
-    public User findByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+    public User findByUserName(String myUser) {
+        return userRepository.findByUserName(myUser);
     }
 
 }

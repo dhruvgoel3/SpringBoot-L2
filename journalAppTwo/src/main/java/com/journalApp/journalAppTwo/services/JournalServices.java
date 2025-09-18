@@ -18,16 +18,21 @@ public class JournalServices {
     private JournalEntryRepository journalEntryRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserServices userServices;
 
-    public JournalEntity saveEntry(JournalEntity journalEntity, String userName) {
-        JournalEntity entryInDb = journalEntryRepository.save(journalEntity);
-        System.out.println(entryInDb.toString());
-        User myUser = userRepository.findByUserName(userName);
-        System.out.println(myUser);
-        myUser.getGetJournalEntries().add(entryInDb.getId());
-        userRepository.save(myUser);
-        return entryInDb;
+    public JournalEntity saveEntry(JournalEntity myEntry, String userName) { // postmapping
+        User user = userServices.findByUserName(userName);
+        JournalEntity saved = journalEntryRepository.save(myEntry);
+        user.getGetJournalEntries().add(saved);
+        userServices.saveEntry(user);
+
+        // JournalEntity entryInDb = journalEntryRepository.save(journalEntity);
+        // System.out.println(entryInDb.toString());
+        // User myUser = userRepository.findByUserName(userName);
+        // System.out.println(myUser);
+        // myUser.getGetJournalEntries().add(entryInDb.getId());
+        // userRepository.save(myUser);
+        return journalEntryRepository.save(myEntry);
 
     }
 

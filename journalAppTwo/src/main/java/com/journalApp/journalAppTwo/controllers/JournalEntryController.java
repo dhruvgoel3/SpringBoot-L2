@@ -6,9 +6,10 @@ import com.journalApp.journalAppTwo.services.UserServices;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,11 @@ public class JournalEntryController {
     private UserServices userServices;
 
     @GetMapping("/{userName}")
-    public List<JournalEntity> getAllJournalEntriesOfUser(@PathVariable String userName) {
+    public List<JournalEntity> getAllJournalEntriesOfUser() {
         return journalServices.getAllEntries();
+        // User user = userServices.findByUserName(userName);
+        // List<JournalEntity> all =
+
     }
 
     @GetMapping("/id/{myId}")
@@ -33,9 +37,14 @@ public class JournalEntryController {
     }
 
     @PostMapping("/{userName}")
-    public JournalEntity createEntry(@RequestBody JournalEntity myEntry, @PathVariable String userName) {
-        myEntry.setDate(LocalDateTime.now());
-        return journalServices.saveEntry(myEntry, userName);
+    public ResponseEntity<JournalEntity> createEntry(@RequestBody JournalEntity myEntry,
+            @PathVariable String userName) {
+        try {
+            journalServices.saveEntry(myEntry, userName);
+            return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/id/{myId}")
