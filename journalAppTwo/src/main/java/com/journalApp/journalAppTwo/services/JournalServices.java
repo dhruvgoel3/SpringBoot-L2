@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.journalApp.journalAppTwo.Repository.JournalEntryRepository;
-import com.journalApp.journalAppTwo.Repository.UserRepository;
 import com.journalApp.journalAppTwo.entity.JournalEntity;
 import com.journalApp.journalAppTwo.entity.User;
 
@@ -20,27 +19,23 @@ public class JournalServices {
     @Autowired
     private UserServices userServices;
 
+    // Creating a entry in DB
     public JournalEntity saveEntry(JournalEntity myEntry, String userName) { // postmapping
         User user = userServices.findByUserName(userName);
         JournalEntity saved = journalEntryRepository.save(myEntry);
         user.getGetJournalEntries().add(saved);
         userServices.saveEntry(user);
-
-        // JournalEntity entryInDb = journalEntryRepository.save(journalEntity);
-        // System.out.println(entryInDb.toString());
-        // User myUser = userRepository.findByUserName(userName);
-        // System.out.println(myUser);
-        // myUser.getGetJournalEntries().add(entryInDb.getId());
-        // userRepository.save(myUser);
         return journalEntryRepository.save(myEntry);
 
     }
 
-    public List<JournalEntity> getAllEntries() {
+    // Get all entries
+    public List<JournalEntity> getAllEntries(String userName) {
         return journalEntryRepository.findAll();
 
     }
 
+    // Get entries using ID
     public Optional<JournalEntity> findById(ObjectId myId) {
         return journalEntryRepository.findById(myId);
 
@@ -50,8 +45,12 @@ public class JournalServices {
         journalEntryRepository.deleteAll();
     }
 
-    public void deleteByID(ObjectId myId) {
+    public void deleteByID(ObjectId myId, String userName) {
+        User user = userServices.findByUserName(userName);
+        user.getGetJournalEntries().removeIf(x -> x.getId().equals(myId));
+        userServices.saveEntry(user);
         journalEntryRepository.deleteById(myId);
+
     }
 
 }
