@@ -28,6 +28,11 @@ public class JournalServices {
         return journalEntryRepository.save(myEntry);
 
     }
+     public JournalEntity saveEntryTwo(JournalEntity myEntry) { // postmapping 2
+        return journalEntryRepository.save(myEntry);
+        
+
+    }
 
     // Get all entries
     public List<JournalEntity> getAllEntries(String userName) {

@@ -68,22 +68,25 @@ public class JournalEntryController {
         journalServices.deleteAll();
     }
 
-    @PutMapping("/id/{userName}/{myId}")
+    @PutMapping("{userName}/{myId}")
     public ResponseEntity<?> updateJournalEntry(
-            @PathVariable ObjectId id,
+            @PathVariable ObjectId myId,
             @RequestBody JournalEntity newEntry,
             @PathVariable String userName) {
 
         // find existing entry or throw if not found
-        JournalEntity old = journalServices.findById(id)
-                .orElseThrow(() -> new RuntimeException("Journal entry not found: " + id));
+        JournalEntity old = journalServices.findById(myId)
+                .orElseThrow(() -> new RuntimeException("Journal entry not found: " + myId));
+        System.out.println(myId);
 
         if (old != null) {
             old.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle()
                     : old.getTitle());
+
             old.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("") ? newEntry.getContent()
                     : old.getContent());
             journalServices.saveEntry(old, userName);
+            System.out.println(newEntry);
             return new ResponseEntity<>(old, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -91,3 +94,5 @@ public class JournalEntryController {
     }
 
 }
+// In this file only put mapping is not working properly .
+// There are some some errors in updation of code
