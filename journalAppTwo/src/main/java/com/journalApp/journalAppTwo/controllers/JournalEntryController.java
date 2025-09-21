@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,15 +37,13 @@ public class JournalEntryController {
     }
 
     @GetMapping("/{userName}")
-    public ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName) {
+    public List<JournalEntity> getAllJournalEntriesOfUser(@PathVariable String userName) {
         User user = userServices.findByUserName(userName);
-        List<JournalEntity> all = user.getGetJournalEntries();
-        if (all != null && !all.isEmpty())
-            ;
-        {
-            return new ResponseEntity<>(all, HttpStatus.OK);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User '" + userName + "' not found");
         }
-
+        return user.getGetJournalEntries();
     }
 
     @GetMapping("/id/{myId}")
