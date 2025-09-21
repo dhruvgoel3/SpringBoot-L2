@@ -56,7 +56,7 @@ public class JournalEntryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/id/{myId}")
+    @DeleteMapping("{myId}")
     public void deleteJournalEntryById(@PathVariable ObjectId myId, @PathVariable String userName) {
         journalServices.deleteByID(myId, userName);
     }
