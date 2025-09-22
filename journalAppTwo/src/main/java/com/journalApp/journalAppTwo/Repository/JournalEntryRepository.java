@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.journalApp.journalAppTwo.entity.JournalEntity;
 
-public interface JournalEntryRepository extends MongoRepository<JournalEntity,ObjectId> {
+public interface JournalEntryRepository extends MongoRepository<JournalEntity, ObjectId> {
 
-    
 }

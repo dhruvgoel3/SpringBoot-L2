@@ -19,43 +19,61 @@ public class JournalServices {
     @Autowired
     private UserServices userServices;
 
-    // Creating a entry in DB
-    public JournalEntity saveEntry(JournalEntity myEntry, String userName) { // postmapping
-        User user = userServices.findByUserName(userName);
+    // Save or update an entry and ensure user's list is updated
+    public JournalEntity saveEntry(JournalEntity myEntry, String userName) {
+        // set date if null
+        myEntry.ensureDate();
+
         JournalEntity saved = journalEntryRepository.save(myEntry);
-        user.getGetJournalEntries().add(saved);
-        userServices.saveEntry(user);
-        return journalEntryRepository.save(myEntry);
 
+        // add to user journal list if user exists
+        User user = userServices.findByUserName(userName);
+        if (user != null) {
+            boolean already = user.getJournalEntries().stream()
+                    .anyMatch(e -> e.getId() != null && e.getId().equals(saved.getId()));
+            if (!already) {
+                user.getJournalEntries().add(saved);
+                userServices.saveEntry(user);
+            } else {
+                // If already present, optionally update the DBRef list by replacing the entry object
+                // (keep it simple: just save the user so DBRef stays consistent)
+                userServices.saveEntry(user);
+            }
+        }
+        return saved;
     }
-     public JournalEntity saveEntryTwo(JournalEntity myEntry) { // postmapping 2
-        return journalEntryRepository.save(myEntry);
-        
 
+    // simple save (no user linking) - kept for any direct save needs
+    public JournalEntity saveEntryTwo(JournalEntity myEntry) {
+        myEntry.ensureDate();
+        return journalEntryRepository.save(myEntry);
     }
 
-    // Get all entries
     public List<JournalEntity> getAllEntries(String userName) {
         return journalEntryRepository.findAll();
-
     }
 
-    // Get entries using ID
     public Optional<JournalEntity> findById(ObjectId myId) {
         return journalEntryRepository.findById(myId);
-
     }
 
     public void deleteAll() {
         journalEntryRepository.deleteAll();
     }
 
+    public boolean existsById(ObjectId id) {
+        return journalEntryRepository.existsById(id);
+    }
+
     public void deleteByID(ObjectId myId, String userName) {
         User user = userServices.findByUserName(userName);
-        user.getGetJournalEntries().removeIf(x -> x.getId().equals(myId));
-        userServices.saveEntry(user);
-        journalEntryRepository.deleteById(myId);
-
+        if (user != null) {
+            user.getJournalEntries().removeIf(x -> x.getId() != null && x.getId().equals(myId));
+            userServices.saveEntry(user);
+        }
+        if (journalEntryRepository.existsById(myId)) {
+            journalEntryRepository.deleteById(myId);
+        }
     }
 
 }

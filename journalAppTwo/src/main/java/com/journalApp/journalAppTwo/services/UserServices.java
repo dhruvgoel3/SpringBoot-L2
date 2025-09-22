@@ -16,26 +16,23 @@ public class UserServices {
     @Autowired
     private UserRepository userRepository;
 
-    public User saveEntry(User user) { // save user
+    public User saveEntry(User user) {
         return userRepository.save(user);
-
     }
 
-    public List<User> getAll() { // getAll users
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
     public Optional<User> findById(ObjectId myId) {
         return userRepository.findById(myId);
-
     }
 
     public void deleteById(ObjectId myId) {
         userRepository.deleteById(myId);
     }
 
-    public void deleteAll()
-    {
+    public void deleteAll() {
         userRepository.deleteAll();
     }
 

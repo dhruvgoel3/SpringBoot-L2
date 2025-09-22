@@ -6,8 +6,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.mongodb.lang.NonNull;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,9 +15,14 @@ import lombok.NoArgsConstructor;
 public class JournalEntity {
     @Id
     private ObjectId id;
-    @NonNull
     private String title;
     private String content;
     private LocalDateTime date;
 
+    // helper to set date if not present
+    public void ensureDate() {
+        if (this.date == null) {
+            this.date = LocalDateTime.now();
+        }
+    }
 }
