@@ -11,11 +11,11 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/journal/**").permitAll()   // allow all for /journal/**
-                .anyRequest().permitAll()                    // allow everything else
-            )
-            .formLogin();  // or .httpBasic() if you prefer
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/journal/**").authenticated() // allow authenticated /journal/**
+                        .anyRequest().permitAll() // allow everything else
+                )
+                .httpBasic();
 
         return http.build();
     }
