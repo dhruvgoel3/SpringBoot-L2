@@ -20,15 +20,14 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     private ObjectId id;
-
     @Indexed(unique = true)
     @NonNull
     private String userName;
     @NonNull
     private String password;
+    private List<String> roles;
 
     // renamed field to be clearer
     @DBRef
     private List<JournalEntity> journalEntries = new ArrayList<>();
-    private List<String> roles;
 }
