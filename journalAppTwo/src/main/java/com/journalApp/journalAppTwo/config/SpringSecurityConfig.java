@@ -21,17 +21,18 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable()) //
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/journal/**").authenticated() // allow authenticated /journal/**
                         .anyRequest().permitAll() // allow everything else
                 )
                 .httpBasic(withDefaults());
 
-
         return http.build();
     }
 
-    //    @Override
+
+//        @Override
     protected void filterChain(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(auth.getDefaultUserDetailsService()).passwordEncoder(passwordEncoder());
     }
@@ -41,3 +42,4 @@ public class SpringSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+// thiw file is not okk
